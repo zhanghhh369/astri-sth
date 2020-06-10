@@ -1,15 +1,17 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import connector.StreamSetsConnector;
 //import model.BaseJPARepository;
@@ -23,6 +25,7 @@ public class EventLogger {
 	private static Map<String,String> firstRecordTime = new HashMap<String,String>();
 	private static Map<String,Integer> zeroCount = new HashMap<String,Integer>();
 	public static Map<String,String> pipelines = new HashMap<String,String>();
+	public List<Entry<String, String>> pipelineList = new ArrayList<Map.Entry<String, String>>();
 	String UNKNOWN_USER = "UNKNOWN_USER";
 	public List<String> pipelineIds = new ArrayList<String>();
 	@Inject
@@ -43,9 +46,24 @@ public class EventLogger {
 				for (JsonNode pipeline : pipelineEntries) {
 					String pipelineId = pipeline.path("pipelineId").asText();
 					String pipelineTitle = pipeline.path("title").asText();
-					pipelines.put(pipelineId, pipelineTitle);
+					pipelines.put(pipelineTitle, pipelineId);
 				}
+				pipelineList = new ArrayList<Map.Entry<String, String>>(pipelines.entrySet());
+				Collections.sort(pipelineList, new Comparator<Map.Entry<String, String>>() {  
+					@Override
+				    public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {      
+				        return (o1.getKey()).toString().compareTo(o2.getKey());
+				    }
+				});
+	//			System.out.println(pipelineList + "#########");
 			}
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			System.out.println(pipelineList + "#########");
 		});
 	}
 	

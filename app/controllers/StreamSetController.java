@@ -1,8 +1,13 @@
 package controllers;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
@@ -18,11 +23,8 @@ public class StreamSetController extends Controller {
 	public @Inject StreamSetsHistoryExtractor streamSetsHistoryExtractor;
 	public @Inject FormFactory formFactory;
 
-//	pipelineIds = eventLogger.pullEventLogFromStreamSets();
+	
 	public Result start(Http.Request request) {
-//	    DynamicForm pipelineForm = formFactory.form().bindFromRequest(request);
-//		String pipelineIds = pipelineForm.;
-		streamSetsHistoryExtractor.eventLogger.setPipelines();
 		String[] pipelineIds = request.body().asFormUrlEncoded().get("pipelineId");
 		for (String pipelineId : pipelineIds)
 			streamSetsHistoryExtractor.eventLogger.pipelineIds.add(pipelineId);
@@ -31,9 +33,14 @@ public class StreamSetController extends Controller {
 	
 	public Result listPipelines() throws InterruptedException {
 		streamSetsHistoryExtractor.eventLogger.setPipelines();
-		Thread.sleep(1000);
-		Map<String,String> pipelines = new HashMap<String,String>(streamSetsHistoryExtractor.eventLogger.pipelines);
-		Content html = views.html.list.render(pipelines);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Entry<String, String>> pipelineList = new ArrayList<Map.Entry<String, String>>(streamSetsHistoryExtractor.eventLogger.pipelineList);
+		Content html = views.html.list.render(pipelineList);
 		return ok(html);
 	}
 	

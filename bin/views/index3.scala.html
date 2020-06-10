@@ -1,0 +1,85 @@
+@(pipelineList: List[Map.Entry[String,String]])
+
+@main("Welcome to Workflow Performance Monitor") {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+    <link href='@routes.Assets.versioned("stylesheets/main.css")' type = "text/css" rel="stylesheet" media="all">
+</head>
+
+<html>
+  <body>
+    <div class="page-wrapper bg-dark p-t-100 p-b-50">
+        <div class="wrapper wrapper--w900">
+            <div class="card card-6">
+                <div class="card-heading">
+                    <h2 class="title">Workflow Performance Monitor</h2>
+                </div>
+                <form method="POST" action="start">
+                <div class="card-body" id="body">
+                   		<h2 class="sub_title" style = "text-align:center">Please input the pipeline IDs:</h2>
+                        <div class="form-row" id="row">
+                            <div class="name">pipeline ID</div>
+                            <div class="value" id="div">
+                                <select class="input--style-6" type="text" name="pipelineId"/>
+                                @for(entry <- pipelineList){
+            						<option class="list">@entry.getKey()</option>
+        						}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" style="display: none;" id="row1" >
+                            <div class="name">pipeline ID</div>
+                            <div class="value" id="div">
+                                <input class="input--style-6" type="text" name="pipelineId"/>
+                                <button class="btn btn--pill btn--red" type="button" id="delete" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);">Delete</button>
+                            </div>
+                        </div>
+                </div>
+                <div class="card-footer" style = "text-align:center">
+                	<button class="btn btn--radius-2 btn--green" type="button" id="list">List all the pipelines</button>
+                	<button class="btn btn--radius-2 btn--green" type="button" id="add">Add</button>
+                    <button class="btn btn--radius-2 btn--green" type="submit" id="start">Start</button>
+                </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+	var body = document.getElementById("body");
+	var row1 = document.getElementById("row1");
+	var add = document.getElementById("add");
+	var list = document.getElementById("list");
+	list.onclick = function list(){
+		window.location.href="listPipelines";
+	}
+	add.onclick = function addText(){
+		var pp = document.createElement("p");
+    	var del = document.createElement("input");
+    	var content = row1.innerHTML;
+    	del.type = "button";
+    	del.className = "btn btn--pill btn--red";
+    	del.value = "Delete";
+    	pp.innerHTML = content;
+    	pp.className = "form-row";
+
+    	del.onclick = function(){
+       		pp.parentNode.removeChild(pp);
+    	}
+    	row1.value="";
+    	body.appendChild(pp);
+	}
+	
+</script>
+}

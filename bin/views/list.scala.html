@@ -1,4 +1,4 @@
-@(pipelineMap: Map[String,String])
+@(pipelineList: List[Map.Entry[String,String]])
 
 @main("Welcome to Workflow Performance Monitor") {
 <head>
@@ -22,10 +22,10 @@
                 </div>
                 <div class="card-body" id="body">
                    		<h2 class="sub_title" style = "text-align:center">All the pipelines:</h2>
-                            @for(piplineId <- pipelineMap.keys){
+                            @for(entry <- pipelineList){
             					<div class="form-row" id="row">
-            						<div class="list"><font face="verdana" color="green">Title:&nbsp&nbsp</font>@pipelineMap(piplineId)</div>
-                 					<div><font face="verdana" color="red" weight="bold">Id&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</font>@piplineId</div>
+            						<div class="list">@entry.getKey()</div>
+                 					<div><font face="verdana" color="red" weight="bold">Id:&nbsp&nbsp</font>@entry.getValue()</div>
             					</div>
         					}
                 </div>

@@ -4,7 +4,7 @@
 
 # An example controller showing a sample home page
 + anyhost
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.StreamSetController.index
 
 # Map static resources from the /public folder to the /assets URL path
 + anyhost
